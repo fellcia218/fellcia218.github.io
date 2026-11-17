@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>阅读文章</title>
+    <style>
+        /* 这是文章页面的排版样式 */
+        body { font-family: "Microsoft YaHei", sans-serif; max-width: 700px; margin: 50px auto; padding: 20px; line-height: 1.8; background-color: #fcfcfc; color: #333; }
+        h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 15px; }
+        p { text-indent: 2em; color: #444; }
+        .back-home { display: block; text-align: center; margin-top: 40px; color: #3498db; text-decoration: none; font-weight: bold; }
+        #content { min-height: 200px; }
+    </style>
+    <!-- 引入自动解析 Markdown 的魔法库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div id="content">正在加载文章内容...</div>
+    <a href="index.html" class="back-home">← 返回首页</a>
+
+    <script>
+        // 这个脚本会自动读取网址里的 ?file=xxx.md 参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const file = urlParams.get('file');
+        
+        if (file) {
+            fetch(file)
+                .then(response => response.text())
+                .then(text => {
+                    // 把 Markdown 文字变成漂亮的网页
+                    document.getElementById('content').innerHTML = marked.parse(text);
+                })
+                .catch(err => {
+                    document.getElementById('content').innerHTML = "文章加载失败，请检查文件名是否正确。";
+                });
+        } else {
+            document.getElementById('content').innerHTML = "未指定文章。";
+        }
+    </script>
+</body>
+</html>
